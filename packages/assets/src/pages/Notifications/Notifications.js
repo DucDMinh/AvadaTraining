@@ -16,7 +16,6 @@ export default function Notifications() {
       if (notifications.success && notifications.data) {
         console.log(notifications.data);
         setItems(prev => ({
-          ...prev,
           ...notifications.data
         }));
         console.log('true');

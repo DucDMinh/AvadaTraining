@@ -14,7 +14,7 @@ export default function apiRouter(isEmbed = true) {
   router.get('/shops', shopController.getUserShops);
   router.get('/subscription', subscriptionController.getSubscription);
   router.get('/appNews', appNewsController.getList);
-
+  router.get('/notifications', notificationController.getShopNotification);
   router.get('/subscriptions', subscriptionController.getList);
   router.post('/subscriptions', subscriptionController.createOne);
   router.put('/subscriptions', subscriptionController.updateOne);
@@ -22,8 +22,6 @@ export default function apiRouter(isEmbed = true) {
 
   router.get('/settings', settingController.getShopSetting);
   router.post('/settings', settingController.saveShopSetting);
-
-  router.get('/notifications', notificationController.getShopNotification);
 
   return router;
 }

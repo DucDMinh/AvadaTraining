@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://administrative-offline-turbo-shareware.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://strip-warranties-persian-formerly.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

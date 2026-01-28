@@ -3,7 +3,7 @@ import {getCurrentShop} from '@functions/helpers/auth';
 
 export async function getShopNotification(ctx) {
   try {
-    const shopId = getCurrentShop();
+    const shopId = getCurrentShop(ctx);
     const notification = await getNotifications(shopId);
     ctx.body = {
       success: true,
