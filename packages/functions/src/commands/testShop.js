@@ -27,7 +27,6 @@ const shopRef = db.collection('shops');
     const doc = await shopRef.doc(shopId).get();
     // const shop = doc.data();
     const shop = formatDateFields(doc.data());
-    const shopData = prepareShopData(doc.id, shop, 'avada-apps-access-token');
 
     logger.info(`Initializing Shopify client for shop: ${shopData.shopifyDomain}`);
     const shopify = new Shopify({

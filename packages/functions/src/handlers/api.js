@@ -11,10 +11,10 @@ import shopifyOptionalScopes from '@functions/config/shopifyOptionalScopes';
 import {publishTopicAsync} from '@functions/helpers/pubsub/publishTopic';
 import {getShopByShopifyDomain} from '@functions/repositories/shopRepository';
 import {Firestore} from '@google-cloud/firestore';
+import {syncOrders} from '../../lib/controllers/notificationController';
 
 const firestore = new Firestore();
 const settings = firestore.collection('settings');
-
 // Initialize all demand configuration for an application
 const api = new App();
 api.proxy = true;
@@ -52,7 +52,7 @@ api.use(
           .limit(1)
           .get();
         if (setting.empty) {
-          settings.doc(shopId).set(
+          await settings.doc(shopId).set(
             {
               shopDomain: ctx.state.shopify.shop,
               shopId: shopId,
@@ -70,6 +70,7 @@ api.use(
             {merge: true}
           );
         }
+        await syncOrders(ctx);
       } catch (e) {
         console.error(e);
       }

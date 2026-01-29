@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://tail-cooler-maiden-magnificent.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://maritime-constitute-dns-existing.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';

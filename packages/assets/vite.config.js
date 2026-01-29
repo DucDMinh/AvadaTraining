@@ -48,6 +48,7 @@ const proxyOptions = {
 
 const shopifyApiKey = process.env.SHOPIFY_API_KEY;
 const shopifyApiSecret = process.env.SHOPIFY_API_SECRET;
+const shopifyAccessToken = process.env.SHOPIFY_ACCESS_TOKEN;
 if (!isProduction && shopifyApiKey) {
   try {
     const baseUrl = process.env.HOST.replace('https://', '');
@@ -56,7 +57,8 @@ if (!isProduction && shopifyApiKey) {
     updateEnvFile('../functions/.env', {
       APP_BASE_URL: baseUrl,
       SHOPIFY_API_KEY: shopifyApiKey,
-      SHOPIFY_SECRET: shopifyApiSecret
+      SHOPIFY_SECRET: shopifyApiSecret,
+      SHOPIFY_ACCESS_TOKEN: shopifyAccessToken
     });
 
     updateThemeAppExtFile('../../extensions/theme-extension/assets/avada-embed.js');

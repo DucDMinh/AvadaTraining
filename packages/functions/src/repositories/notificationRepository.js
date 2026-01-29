@@ -3,6 +3,27 @@ import {Firestore} from '@google-cloud/firestore';
 const firestore = new Firestore();
 const collectionRef = firestore.collection('notifications');
 
+export async function updateNotifications(shopId, shopDomain, notifications) {
+  try {
+    const docRef = collectionRef.doc(shopId);
+
+    await docRef.set(
+      {
+        shopId: shopId,
+        shopDomain: shopDomain,
+        items: notifications,
+        lastSync: new Date().toISOString()
+      },
+      {merge: true}
+    );
+
+    return true;
+  } catch (error) {
+    console.error('Error saving notifications to Firestore:', error);
+    return false;
+  }
+}
+
 export async function getNotifications(shopDomain) {
   try {
     const snapshot = await collectionRef

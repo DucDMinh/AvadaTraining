@@ -1,8 +1,28 @@
-query {
-  shop {
-    name
-    email
-    description
+query getOrder {
+  orders(first: 30) {
+    edges{
+      node{
+        id
+        createdAt
+        customer{
+          defaultAddress{
+            city
+            country
+          }
+          firstName
+        }
+        lineItems(first:1){
+          nodes {
+              title
+              product {
+                id
+              }
+              image {
+                url
+              }
+          }
+        }
+      }
+    }
   }
 }
-

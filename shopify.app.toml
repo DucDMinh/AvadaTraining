@@ -1,5 +1,4 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
-
 client_id = "649b1099f3a301a3109d67e0c7a5ea88"
 name = "final-exam"
 application_url = "https://example.com"
@@ -21,4 +20,4 @@ optional_scopes = []
 use_legacy_install_flow = false
 
 [auth]
-redirect_urls = []
+redirect_urls = ["https://admin.shopify.com/store/final-exam-store-3/apps/final-exam-5/embed"]
