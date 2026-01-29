@@ -14,7 +14,10 @@ export default function apiRouter(isEmbed = true) {
   router.get('/shops', shopController.getUserShops);
   router.get('/subscription', subscriptionController.getSubscription);
   router.get('/appNews', appNewsController.getList);
+
   router.get('/notifications', notificationController.getShopNotification);
+  router.delete('/notifications', notificationController.deleteNotification);
+
   router.get('/subscriptions', subscriptionController.getList);
   router.post('/subscriptions', subscriptionController.createOne);
   router.put('/subscriptions', subscriptionController.updateOne);

@@ -10,103 +10,65 @@ export default function Notifications() {
   const [items, setItems] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const notifications = await api('/notifications', {
+      const response = await api('/notifications', {
         method: 'GET'
       });
-      if (notifications.success && notifications.data) {
-        console.log(notifications.data);
-        setItems(prev => ({
-          ...notifications.data
-        }));
-        console.log('true');
+      if (response.success && response.data) {
+        const formattedItems = response.data.map(item => {
+          const dateObj = item.timestamp?._seconds
+            ? new Date(item.timestamp._seconds * 1000)
+            : new Date(item.timestamp);
+
+          return {
+            ...item,
+            createAt: dateObj.toLocaleDateString('en-US', {
+              day: 'numeric',
+              month: 'long',
+              year: 'numeric'
+            }),
+            timestampString: dateObj.toLocaleTimeString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          };
+        });
+
+        setItems(formattedItems);
       }
     };
     fetchData().then(() => {
     });
-  });
-  // const items = [
-  //   {
-  //     id: '100',
-  //     firstName: 'John Doe',
-  //     city: 'New York',
-  //     country: 'United States',
-  //     productName: 'Puffer Jacket With Hidden Hood',
-  //     timestamp: 'a day ago',
-  //     productImage:
-  //       'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746',
-  //     createAt: 'From March 8, \n2021'
-  //   },
-  //   {
-  //     id: '101',
-  //     firstName: 'Jane Smith',
-  //     city: 'London',
-  //     country: 'United Kingdom',
-  //     productName: 'Leather Bag',
-  //     timestamp: '2 days ago',
-  //     productImage:
-  //       'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746',
-  //     createAt: 'From March 7, \n2021'
-  //   },
-  //   {
-  //     id: '102',
-  //     firstName: 'Mike Ross', // M
-  //     city: 'Toronto',
-  //     country: 'Canada',
-  //     productName: 'Sneakers',
-  //     timestamp: '3 days ago',
-  //     productImage:
-  //       'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746',
-  //     createAt: 'From March 6, \n2021'
-  //   },
-  //   {
-  //     id: '104',
-  //     firstName: 'John Doe',
-  //     city: 'New York',
-  //     country: 'United States',
-  //     productName: 'Puffer Jacket With Hidden Hood',
-  //     timestamp: 'a day ago',
-  //     productImage:
-  //       'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746',
-  //     createAt: 'From March 8, \n2021'
-  //   },
-  //   {
-  //     id: '105',
-  //     firstName: 'Jane Smith',
-  //     city: 'London',
-  //     country: 'United Kingdom',
-  //     productName: 'Leather Bag',
-  //     timestamp: '2 days ago',
-  //     productImage:
-  //       'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746',
-  //     createAt: 'From March 7, \n2021'
-  //   },
-  //   {
-  //     id: '106',
-  //     firstName: 'Mike Ross', // M
-  //     city: 'Toronto',
-  //     country: 'Canada',
-  //     productName: 'Sneakers',
-  //     timestamp: '3 days ago',
-  //     productImage:
-  //       'https://burst.shopifycdn.com/photos/freelance-designer-working-on-laptop.jpg?width=746',
-  //     createAt: 'From March 6, \n2021'
-  //   }
-  // ];
-
+  }, []);
   const sortOptions = [
     {label: 'Ascending by name', value: '1'},
     {label: 'Descending by name', value: '2'}
   ];
   const sortedItems = useMemo(() => {
     return [...items].sort((a, b) => {
+      const nameA = a.firstName || '';
+      const nameB = b.firstName || '';
+
       if (sortValue === '1') {
-        return a.firstName.localeCompare(b.firstName);
+        return nameA.localeCompare(nameB);
       } else {
-        return b.firstName.localeCompare(a.firstName);
+        return nameB.localeCompare(nameA);
       }
     });
   }, [items, sortValue]);
+  const handleDelete = async id => {
+    try {
+      const response = await api('/notifications', {
+        method: 'DELETE',
+        body: {id: id} // Gửi ID lên server
+      });
 
+      if (response.success) {
+        setItems(prevItems => prevItems.filter(item => item.id !== id));
+      }
+    } catch (error) {
+      console.error('Lỗi khi xóa:', error);
+    }
+  };
   return (
     <Page title="Notifications" subtitle="List of sales notification from Shopify">
       <Card>
@@ -126,7 +88,7 @@ export default function Notifications() {
               city,
               country,
               productName,
-              timestamp,
+              timestampString,
               productImage,
               createAt
             } = item;
@@ -165,14 +127,17 @@ export default function Notifications() {
                             </div>
                             <div className={'Avada-SP__Subtitle'}>purchased {productName}</div>
                             <div className={'Avada-SP__Footer'}>
-                              {timestamp}{' '}
+                              {timestampString}
                               <span className="uni-blue">
                                 <i className="fa fa-check" aria-hidden="true"/> by Avada
                               </span>
                             </div>
                           </div>
                         </a>
-                        <XSmallIcon style={{width: '25px', height: '25px'}}/>
+                        <XSmallIcon
+                          style={{width: '25px', height: '25px'}}
+                          onClick={() => handleDelete(id)}
+                        />
                       </div>
                     </div>
                   </div>
