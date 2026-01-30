@@ -1,24 +1,31 @@
 import {Firestore} from '@google-cloud/firestore';
 import {presentDataAndFormatDate} from '@avada/firestore-utils';
+import {prepareShopData} from '@avada/core';
+import shopifyConfig from '@functions/config/shopify';
 
 const firestore = new Firestore();
-/** @type CollectionReference */
 const shopInfosRef = firestore.collection('shopInfos');
 
 /**
- * Get shop info by given shop ID
- *
- * @param {string} id
- * @return {Promise<FirebaseFirestore.DocumentData>}
+ * @param {string} id - Shopify Shop ID
+ * @param {Object} shopData
  */
-export async function getShopInfoByShopId(id) {
-  const docs = await shopInfosRef
-    .where('shopId', '==', id)
-    .limit(1)
-    .get();
-  if (docs.empty) {
-    return null;
+export async function getShopInfoByShopId(id, shopData) {
+  const docRef = shopInfosRef.doc(id);
+  const snapshot = await docRef.get();
+  if (snapshot.exists) {
+    return presentDataAndFormatDate(snapshot);
   }
-  const [doc] = docs.docs;
-  return presentDataAndFormatDate(doc);
+  const {accessToken} = prepareShopData(shopData.id, shopData, shopifyConfig.accessTokenKey);
+  const newShopDoc = {
+    ...shopData,
+    accessToken,
+    createdAt: new Date()
+  };
+  await docRef.set(newShopDoc);
+  return presentDataAndFormatDate({
+    id: id,
+    exists: true,
+    data: () => newShopDoc
+  });
 }

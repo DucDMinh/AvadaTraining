@@ -49,7 +49,10 @@ app.use(
         success: true
       });
     },
-    optionalScopes: shopifyOptionalScopes
+    optionalScopes: shopifyOptionalScopes,
+    afterInstall: ctx => {
+      return (ctx.body = 'abc');
+    }
   }).routes()
 );
 

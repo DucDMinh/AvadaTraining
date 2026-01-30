@@ -30,12 +30,12 @@ export default function Settings() {
             ...response.data
           }));
           console.log('true');
-        } else {
-          await api('/settings', {
-            method: 'POST',
-            body: defaultSetting
-          });
-          setSettings(defaultSetting);
+          // } else {
+          //   // await api('/settings', {
+          //   //   method: 'POST',
+          //   //   body: defaultSetting
+          //   // });
+          //   // setSettings(defaultSetting);
         }
       } catch (e) {
         console.error('Failed to load settings', e);

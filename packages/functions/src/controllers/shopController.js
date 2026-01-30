@@ -1,4 +1,4 @@
-import {getCurrentShop} from '../helpers/auth';
+import {getCurrentShop, getCurrentShopData} from '../helpers/auth';
 import {getShopInfoByShopId} from '@functions/repositories/shopInfoRepository';
 import {getShopById} from '@functions/repositories/shopRepository';
 
@@ -9,8 +9,12 @@ import {getShopById} from '@functions/repositories/shopRepository';
 export async function getUserShops(ctx) {
   try {
     const shopId = getCurrentShop(ctx);
+    const shopData = await getCurrentShopData(ctx);
     console.log('Get user shops', shopId);
-    const [shop, shopInfo] = await Promise.all([getShopById(shopId), getShopInfoByShopId(shopId)]);
+    const [shop, shopInfo] = await Promise.all([
+      getShopById(shopId),
+      getShopInfoByShopId(shopId, shopData)
+    ]);
 
     console.log('Got shop info', shopInfo);
 

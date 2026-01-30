@@ -94,7 +94,7 @@ export async function getOrdersForNotification(shopDomain, accessToken) {
  * @return {Shopify}
  */
 export function initShopify(shopData) {
-  const shopParsedData = prepareShopData(shopData.id, shopData, shopifyConfig.accessToken);
+  const shopParsedData = prepareShopData(shopData.id, shopData, shopifyConfig.accessTokenKey);
   const {shopifyDomain, accessToken} = shopParsedData;
 
   return new Shopify({

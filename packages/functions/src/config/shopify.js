@@ -11,7 +11,7 @@ export default {
     'read_products',
     'read_script_tags',
     'write_script_tags',
-    'write_products'
+    'write_cash_tracking'
   ],
   accessTokenKey: process.env.SHOPIFY_ACCESS_TOKEN_KEY || 'avada-apps-access-token',
   apiVersion: process.env.SHOPIFY_API_VERSION || '',
