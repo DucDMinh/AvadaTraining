@@ -1,5 +1,5 @@
 (function() {
-  const BASE_URL = 'https://jack-providing-servers-flashers.trycloudflare.com/scripttag';
+  const BASE_URL = 'https://contract-article-alphabetical-initiative.trycloudflare.com/scripttag';
 
   const scriptElement = document.createElement('script');
   scriptElement.type = 'text/javascript';
